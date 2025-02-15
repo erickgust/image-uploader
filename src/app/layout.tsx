@@ -19,7 +19,7 @@ export default function RootLayout({
       <body
         className={clsx(
           inter.variable,
-          'bg-background-light dark:bg-background-dark antialiased',
+          'bg-main-light dark:bg-main-dark antialiased',
         )}
       >
         <ThemeProvider attribute='class' enableSystem disableTransitionOnChange>

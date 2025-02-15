@@ -3,9 +3,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-background-light: #f9fafb;
-  --color-background-dark: #121826;
+  --color-main-light: #f9fafb;
+  --color-main-dark: #121826;
+
   --spacing-18: 4.5rem;
+
+  --container-8xl: 90rem;
 }
 
 @layer base {
