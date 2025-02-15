@@ -1,10 +1,10 @@
-import localFont from 'next/font/local'
+import { Inter } from 'next/font/google'
 import './globals.css'
 
-const overusedGR = localFont({
-  src: './fonts/OverusedGroteskRoman-VF.ttf',
+const overusedGR = Inter({
+  subsets: ['latin'],
   display: 'swap',
-  variable: '--font-overused-gr',
+  variable: '--font-inter',
 })
 
 export default function RootLayout({
