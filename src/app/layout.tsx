@@ -2,12 +2,18 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import clsx from 'clsx'
 import './globals.css'
+import { Metadata } from 'next'
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
 })
+
+export const metadata: Metadata = {
+  title: 'ImageUploader',
+  description: 'Upload images and share them with others.',
+}
 
 export default function RootLayout({
   children,
