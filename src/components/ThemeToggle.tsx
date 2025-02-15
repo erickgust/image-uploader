@@ -8,7 +8,7 @@ export function ThemeToggle() {
 
   return (
     <button
-      className='rounded-lg border border-gray-200 bg-white p-2 dark:border-gray-600 dark:bg-gray-700'
+      className='cursor-pointer rounded-lg border border-gray-200 bg-white p-2 dark:border-gray-600 dark:bg-gray-700'
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
       <span className='sr-only'>Toggle Theme</span>
