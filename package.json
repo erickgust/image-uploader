@@ -9,7 +9,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
-    "format:write": "prettier --write --cache",
+    "format:write": "prettier --write",
     "prepare": "husky"
   },
   "dependencies": {
@@ -23,7 +23,6 @@
     "@types/node": "22.13.4",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
-    "concurrently": "9.1.2",
     "eslint": "9.20.1",
     "eslint-config-next": "15.1.7",
     "eslint-config-prettier": "10.0.1",
@@ -37,7 +36,9 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "concurrently --names \"lint,typecheck,format\" --prefix-colors \"yellow,blue,green\" \"bun run lint:fix\" \"bun run type-check\" \"bun run format:write\""
+      "bun lint:fix",
+      "bun type-check",
+      "bun format:write"
     ]
   }
 }
