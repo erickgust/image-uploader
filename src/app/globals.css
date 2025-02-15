@@ -1,17 +1,13 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --color-background: var(--background);
+  --color-background-light: #f9fafb;
+  --color-background-dark: #121826;
+  --spacing-18: 4.5rem;
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -22,15 +18,6 @@
   }
 }
 
-@theme {
-  --spacing-18: 4.5rem;
-}
-
-:root {
-  --background: #f9fafb;
-}
-
 body {
-  background: var(--background);
   font-family: var(--font-inter), Helvetica, sans-serif;
 }
