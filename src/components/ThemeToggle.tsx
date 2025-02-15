@@ -13,11 +13,22 @@ export function ThemeToggle() {
     >
       <span className='sr-only'>Toggle Theme</span>
 
-      {theme === 'dark' ? (
-        <Image src='/sun_fill.svg' alt='Light Mode' width={24} height={24} />
-      ) : (
-        <Image src='/moon_fill.svg' alt='Dark Mode' width={24} height={24} />
-      )}
+      <Image
+        src='/sun_fill.svg'
+        alt='Light Mode'
+        className='hidden dark:inline-block'
+        width={24}
+        height={24}
+        priority
+      />
+      <Image
+        src='/moon_fill.svg'
+        alt='Dark Mode'
+        className='inline-block dark:hidden'
+        width={24}
+        height={24}
+        priority
+      />
     </button>
   )
 }
