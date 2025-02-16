@@ -29,7 +29,10 @@ export default function Home() {
             <div className='text-center text-[#121826] dark:text-gray-50/80'>
               <p className='mb-2 text-sm font-medium'>
                 Drag & drop a file or{' '}
-                <label htmlFor='upload' className='text-[#3662E3]'>
+                <label
+                  htmlFor='upload'
+                  className='cursor-pointer text-[#3662E3]'
+                >
                   browse files
                 </label>
                 <input
