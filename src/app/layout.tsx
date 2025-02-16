@@ -11,7 +11,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'ImageUploader',
+  title: 'ImageUpload',
   description: 'Upload images and share them with others.',
 }
 
