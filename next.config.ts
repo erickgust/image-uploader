@@ -7,6 +7,13 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'devchallenges.io',
+      },
+    ],
+  },
 }
 
 export default nextConfig

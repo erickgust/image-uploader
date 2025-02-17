@@ -75,6 +75,43 @@ export function FileUploader() {
     )
   }
 
+  if (imageUrl) {
+    return (
+      <div className='flex w-full max-w-[33.75rem] flex-col items-center gap-6'>
+        <Container className='w-full p-2'>
+          <div className='relative aspect-video w-full'>
+            <NextImage
+              fill
+              src={imageUrl}
+              alt='Uploaded image'
+              className='rounded-lg object-contain'
+            />
+          </div>
+        </Container>
+
+        <div className='flex gap-3'>
+          <button className='flex cursor-pointer items-center gap-1 rounded-lg bg-[#3662E3] px-3 py-1.5 text-[0.625rem] font-semibold text-white'>
+            <NextImage src='/link.svg' width={12} height={12} alt='Share' />
+            <span>Share</span>
+          </button>
+          <a
+            href={imageUrl}
+            className='flex cursor-pointer items-center gap-1 rounded-lg bg-[#3662E3] px-3 py-1.5 text-[0.625rem] font-semibold text-white'
+            download
+          >
+            <NextImage
+              src='/download.svg'
+              width={12}
+              height={12}
+              alt='Download'
+            />
+            <span>Download</span>
+          </a>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Container className='w-full max-w-[33.75rem] p-2'>
       <div className='flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 py-28 dark:border-gray-600'>
