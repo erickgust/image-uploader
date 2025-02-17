@@ -1,28 +1,94 @@
 'use client'
 
-import Image from 'next/image'
+import clsx from 'clsx'
+import NextImage from 'next/image'
 import { useState } from 'react'
 
+function Container({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div
+      className={clsx(
+        'rounded-lg bg-white text-[#121826] shadow-xl shadow-gray-200 dark:bg-[#212936] dark:text-gray-50/80 dark:shadow-none',
+        className,
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
 export function FileUploader() {
-  const [file, setFile] = useState<File | null>(null)
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
 
     if (!files) return
 
-    const file = files[0]
-    setFile(file)
+    handleFileUpload(files[0])
+  }
+
+  const handleFileUpload = async (file: File) => {
+    setIsUploading(true)
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+
+      setImageUrl(data.url)
+
+      console.log(data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  if (isUploading && !imageUrl) {
+    return (
+      <Container className='px-20 py-8'>
+        <div className='flex h-full flex-col items-center justify-center gap-4'>
+          <p className='text-center text-sm font-medium'>
+            <strong>Uploading</strong>, please wait..
+          </p>
+
+          <div className='h-1.5 w-80 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-600'>
+            <div className='animate-loading-bar h-1.5 w-14 rounded-full bg-[#3662E3]' />
+          </div>
+        </div>
+      </Container>
+    )
   }
 
   return (
-    <div className='w-full max-w-[33.75rem] rounded-lg bg-white p-2 shadow-xl shadow-gray-200 dark:bg-[#212936] dark:shadow-none'>
+    <Container className='w-full max-w-[33.75rem] p-2'>
       <div className='flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 py-28 dark:border-gray-600'>
         <div className='mb-5'>
-          <Image src='/exit.svg' priority width={32} height={32} alt='Upload' />
+          <NextImage
+            src='/exit.svg'
+            priority
+            width={32}
+            height={32}
+            alt='Upload'
+          />
         </div>
 
-        <div className='text-center text-[#121826] dark:text-gray-50/80'>
+        <div className='text-center'>
           <p className='mb-2 text-sm font-medium'>
             Drag & drop a file or{' '}
             <label htmlFor='upload' className='cursor-pointer text-[#3662E3]'>
@@ -41,6 +107,6 @@ export function FileUploader() {
           </p>
         </div>
       </div>
-    </div>
+    </Container>
   )
 }

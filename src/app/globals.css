@@ -3,12 +3,23 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --animate-loading-bar: loading-bar 1.5s infinite ease-in-out;
+
   --color-main-light: #f9fafb;
   --color-main-dark: #121826;
 
   --spacing-18: 4.5rem;
 
   --container-8xl: 90rem;
+
+  @keyframes loading-bar {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(600%);
+    }
+  }
 }
 
 @layer base {
