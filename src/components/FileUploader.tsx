@@ -119,6 +119,21 @@ export function FileUploader() {
     }
   }
 
+  const handleDownload = async () => {
+    if (!imageUrl) return
+
+    const response = await fetch(imageUrl)
+    const blob = await response.blob()
+    const blobUrl = window.URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = 'image.png'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   useEffect(() => {
     if (imageId || isUploading) return
 
@@ -188,10 +203,9 @@ export function FileUploader() {
             <NextImage src='/link.svg' width={12} height={12} alt='Share' />
             <span>{isCopied ? 'Copied!' : 'Share'}</span>
           </button>
-          <a
-            href={imageUrl}
+          <button
+            onClick={handleDownload}
             className='flex cursor-pointer items-center gap-1 rounded-lg bg-[#3662E3] px-3 py-1.5 text-[0.625rem] font-semibold text-white'
-            download
           >
             <NextImage
               src='/download.svg'
@@ -200,7 +214,7 @@ export function FileUploader() {
               alt='Download'
             />
             <span>Download</span>
-          </a>
+          </button>
         </div>
       </div>
     )
