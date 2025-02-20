@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase'
+import { nanoid } from 'nanoid'
+import { NextRequest } from 'next/server'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()
     const file = formData.get('file')
@@ -37,9 +39,23 @@ export async function POST(req: Request) {
       .from('images')
       .getPublicUrl(data.path)
 
-    console.log(url)
+    const id = nanoid(16)
 
-    return Response.json({ url: url.publicUrl }, { status: 200 })
+    const { error: insertError } = await supabase.from('images').insert({
+      public_id: id,
+      url: url.publicUrl,
+    })
+
+    if (insertError) {
+      console.error('Supabase insert error:', insertError)
+    }
+
+    const shortURL = new URL(id, req.nextUrl.origin)
+
+    return Response.json(
+      { url: url.publicUrl, shortUrl: shortURL.toString() },
+      { status: 200 },
+    )
   } catch (error) {
     console.error('Upload error:', error)
     return Response.json({ error: 'Internal server error' }, { status: 500 })

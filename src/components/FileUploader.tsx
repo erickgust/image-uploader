@@ -25,6 +25,8 @@ function Container({
 
 export function FileUploader() {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [imageId, setImageId] = useState<string | null>(null)
+  const [isCopied, setIsCopied] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -65,6 +67,7 @@ export function FileUploader() {
       const data = await response.json()
 
       setImageUrl(data.url)
+      setImageId(data.shortUrl)
     } catch (error) {
       console.error('Error uploading file', error)
       setError('Failed to upload file. Please try again.')
@@ -104,9 +107,24 @@ export function FileUploader() {
         </Container>
 
         <div className='flex gap-3'>
-          <button className='flex cursor-pointer items-center gap-1 rounded-lg bg-[#3662E3] px-3 py-1.5 text-[0.625rem] font-semibold text-white'>
+          <button
+            onClick={() => {
+              if (!imageId) return
+
+              navigator.clipboard.writeText(imageId)
+              setIsCopied(true)
+            }}
+            ref={(e) => {
+              if (!e) return
+
+              setTimeout(() => {
+                setIsCopied(false)
+              }, 2000)
+            }}
+            className='flex cursor-pointer items-center gap-1 rounded-lg bg-[#3662E3] px-3 py-1.5 text-[0.625rem] font-semibold text-white'
+          >
             <NextImage src='/link.svg' width={12} height={12} alt='Share' />
-            <span>Share</span>
+            <span>{isCopied ? 'Copied!' : 'Share'}</span>
           </button>
           <a
             href={imageUrl}
