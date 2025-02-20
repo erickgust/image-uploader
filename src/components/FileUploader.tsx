@@ -119,6 +119,18 @@ export function FileUploader() {
     }
   }
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const files = e.clipboardData?.files
+
+    if (files && files.length > 0) {
+      const file = files[0]
+      handleFileUpload(file)
+    }
+  }
+
   if (isUploading && !imageUrl) {
     return (
       <Container className='px-20 py-8'>
@@ -195,6 +207,7 @@ export function FileUploader() {
         onDragLeave={handleDragLeave}
         onDragEnter={handleDragEnter}
         onDrop={handleDrop}
+        onPaste={handlePaste}
         data-dragging={isDragging}
       >
         {isDragging && (
