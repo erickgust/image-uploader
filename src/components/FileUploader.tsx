@@ -26,9 +26,11 @@ function Container({
 export function FileUploader() {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
+    setError(null)
 
     if (!files) return
 
@@ -36,7 +38,20 @@ export function FileUploader() {
   }
 
   const handleFileUpload = async (file: File) => {
+    const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB in bytes
+    if (file.size > MAX_FILE_SIZE) {
+      setError('File size exceeds 2MB limit')
+      return
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+    if (!allowedTypes.includes(file.type)) {
+      setError('Invalid file type. Only JPG, PNG and GIF are allowed')
+      return
+    }
+
     setIsUploading(true)
+    setError(null)
 
     const formData = new FormData()
     formData.append('file', file)
@@ -50,10 +65,9 @@ export function FileUploader() {
       const data = await response.json()
 
       setImageUrl(data.url)
-
-      console.log(data)
     } catch (error) {
-      console.error(error)
+      console.error('Error uploading file', error)
+      setError('Failed to upload file. Please try again.')
     } finally {
       setIsUploading(false)
     }
@@ -122,10 +136,14 @@ export function FileUploader() {
             width={32}
             height={32}
             alt='Upload'
+            unoptimized
           />
         </div>
 
         <div className='text-center'>
+          {error && (
+            <p className='mb-2 text-sm font-medium text-red-500'>{error}</p>
+          )}
           <p className='mb-2 text-sm font-medium'>
             Drag & drop a file or{' '}
             <label htmlFor='upload' className='cursor-pointer text-[#3662E3]'>

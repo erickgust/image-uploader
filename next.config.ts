@@ -10,7 +10,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'devchallenges.io',
+        protocol: 'https',
+        hostname: 'axojmkhbpmdbabwwaavg.supabase.co',
+        pathname: '/storage/v1/object/public/images/**',
       },
     ],
   },
