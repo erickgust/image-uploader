@@ -2,7 +2,7 @@
 
 import clsx from 'clsx'
 import NextImage from 'next/image'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function Container({
   children,
@@ -119,17 +119,24 @@ export function FileUploader() {
     }
   }
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
+  useEffect(() => {
+    if (imageId || isUploading) return
 
-    const files = e.clipboardData?.files
+    const handlePaste = (e: ClipboardEvent) => {
+      const files = e.clipboardData?.files
 
-    if (files && files.length > 0) {
-      const file = files[0]
-      handleFileUpload(file)
+      if (files && files.length > 0) {
+        const file = files[0]
+        handleFileUpload(file)
+      }
     }
-  }
+
+    document.addEventListener('paste', handlePaste)
+
+    return () => {
+      document.removeEventListener('paste', handlePaste)
+    }
+  }, [imageId, isUploading])
 
   if (isUploading && !imageUrl) {
     return (
@@ -207,7 +214,6 @@ export function FileUploader() {
         onDragLeave={handleDragLeave}
         onDragEnter={handleDragEnter}
         onDrop={handleDrop}
-        onPaste={handlePaste}
         data-dragging={isDragging}
       >
         {isDragging && (
