@@ -1,28 +1,10 @@
 'use client'
 
-import clsx from 'clsx'
 import NextImage from 'next/image'
 import { useEffect, useState } from 'react'
 import { useDragAndDrop } from '@/hooks/useDragAndDrop'
-
-function Container({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <div
-      className={clsx(
-        'rounded-lg bg-white text-[#121826] shadow-xl shadow-gray-200 dark:bg-[#212936] dark:text-gray-50/80 dark:shadow-none',
-        className,
-      )}
-    >
-      {children}
-    </div>
-  )
-}
+import { Container } from './Container'
+import { LoadingState } from './LoadingState'
 
 export function FileUploader() {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
@@ -115,19 +97,7 @@ export function FileUploader() {
   }, [imageId, isUploading])
 
   if (isUploading && !imageUrl) {
-    return (
-      <Container className='w-full max-w-[30rem] px-8 py-8 sm:px-20'>
-        <div className='flex h-full flex-col items-center justify-center gap-4'>
-          <p className='text-center text-sm font-medium'>
-            <strong>Uploading</strong>, please wait..
-          </p>
-
-          <div className='h-1.5 w-full max-w-80 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-600'>
-            <div className='animate-loading-bar h-1.5 w-14 rounded-full bg-[#3662E3]' />
-          </div>
-        </div>
-      </Container>
-    )
+    return <LoadingState />
   }
 
   if (imageUrl) {
