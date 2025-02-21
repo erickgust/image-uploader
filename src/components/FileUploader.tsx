@@ -2,7 +2,8 @@
 
 import clsx from 'clsx'
 import NextImage from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDragAndDrop } from '@/hooks/useDragAndDrop'
 
 function Container({
   children,
@@ -28,9 +29,19 @@ export function FileUploader() {
   const [imageId, setImageId] = useState<string | null>(null)
   const [isCopied, setIsCopied] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const dragCounter = useRef(0)
+  const { isDragging, dragHandlers } = useDragAndDrop({
+    onDrop: (file) => handleFileUpload(file),
+  })
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    setError(null)
+
+    if (!files) return
+
+    handleFileUpload(files[0])
+  }
 
   const handleFileUpload = async (file: File) => {
     const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB in bytes
@@ -66,56 +77,6 @@ export function FileUploader() {
       setError('Failed to upload file. Please try again.')
     } finally {
       setIsUploading(false)
-    }
-  }
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    setError(null)
-
-    if (!files) return
-
-    handleFileUpload(files[0])
-  }
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    dragCounter.current--
-
-    if (dragCounter.current === 0) {
-      setIsDragging(false)
-    }
-  }
-
-  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    dragCounter.current++
-
-    if (e.dataTransfer?.items && e.dataTransfer.items.length > 0) {
-      setIsDragging(true)
-    }
-  }
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragging(false)
-
-    const files = e.dataTransfer?.files
-
-    if (files && files.length > 0) {
-      const file = files[0]
-
-      if (file) {
-        handleFileUpload(file)
-      }
     }
   }
 
@@ -224,10 +185,7 @@ export function FileUploader() {
     <Container className='w-full max-w-[33.75rem] p-2'>
       <div
         className='group relative rounded-lg border-2 border-dashed border-gray-200 data-[dragging=true]:border-[#3662E3] dark:border-gray-600'
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDragEnter={handleDragEnter}
-        onDrop={handleDrop}
+        {...dragHandlers}
         data-dragging={isDragging}
       >
         {isDragging && (
