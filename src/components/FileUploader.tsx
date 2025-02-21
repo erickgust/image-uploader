@@ -1,8 +1,9 @@
 'use client'
 
 import NextImage from 'next/image'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDragAndDrop } from '@/hooks/useDragAndDrop'
+import { usePasteFile } from '@/hooks/usePasteFile'
 import { Container } from './Container'
 import { LoadingState } from './LoadingState'
 import { UploadedImage } from './UploadedImage'
@@ -12,8 +13,14 @@ export function FileUploader() {
   const [imageId, setImageId] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
   const { isDragging, dragHandlers } = useDragAndDrop({
     onDrop: (file) => handleFileUpload(file),
+  })
+
+  usePasteFile({
+    onPaste: (file) => handleFileUpload(file),
+    isDisabled: Boolean(imageId) || isUploading,
   })
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,25 +68,6 @@ export function FileUploader() {
       setIsUploading(false)
     }
   }
-
-  useEffect(() => {
-    if (imageId || isUploading) return
-
-    const handlePaste = (e: ClipboardEvent) => {
-      const files = e.clipboardData?.files
-
-      if (files && files.length > 0) {
-        const file = files[0]
-        handleFileUpload(file)
-      }
-    }
-
-    document.addEventListener('paste', handlePaste)
-
-    return () => {
-      document.removeEventListener('paste', handlePaste)
-    }
-  }, [imageId, isUploading])
 
   if (isUploading && !imageUrl) {
     return <LoadingState />
