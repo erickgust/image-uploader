@@ -23,18 +23,38 @@ export function UploadedImage({
 }: UploadedImageProps) {
   const [isCopied, setIsCopied] = useState(false)
   const [dimensions, setDimensions] = useState('—')
+  const [error, setError] = useState<string | null>(null)
 
   const handleDownload = async () => {
-    const response = await fetch(imageUrl)
-    const blob = await response.blob()
-    const blobUrl = window.URL.createObjectURL(blob)
+    setError(null)
+    try {
+      const response = await fetch(imageUrl)
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const blob = await response.blob()
+      const blobUrl = window.URL.createObjectURL(blob)
 
-    const link = document.createElement('a')
-    link.href = blobUrl
-    link.download = file.name
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = file.name
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error('Error downloading file', error)
+      setError('Unable to download. Try again.')
+    }
+  }
+
+  const handleCopy = async () => {
+    setError(null)
+    try {
+      await navigator.clipboard.writeText(imageId)
+      setIsCopied(true)
+      setTimeout(() => setIsCopied(false), 1800)
+    } catch (error) {
+      console.error('Error copying link', error)
+      setError('Unable to copy. Select the link and copy it.')
+    }
   }
 
   const meta = [
@@ -78,11 +98,7 @@ export function UploadedImage({
 
       <div className='flex flex-wrap justify-center gap-3 font-mono text-[11.5px] tracking-[0.08em]'>
         <button
-          onClick={() => {
-            navigator.clipboard.writeText(imageId)
-            setIsCopied(true)
-            setTimeout(() => setIsCopied(false), 1800)
-          }}
+          onClick={handleCopy}
           className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-opacity hover:opacity-80'
         >
           [ {isCopied ? 'LINK COPIED' : 'COPY LINK'} ]
@@ -100,6 +116,15 @@ export function UploadedImage({
           [ + NEW ]
         </button>
       </div>
+
+      {error && (
+        <div className='animate-fadein flex items-center gap-2.5 font-mono text-[11.5px] tracking-[0.05em]'>
+          <span className='border-ink inline-flex size-4 items-center justify-center border-[1.5px] font-bold'>
+            !
+          </span>
+          <span>ERR · {error}</span>
+        </div>
+      )}
     </div>
   )
 }
