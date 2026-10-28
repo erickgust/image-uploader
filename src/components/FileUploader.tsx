@@ -116,7 +116,6 @@ export function FileUploader() {
   const reset = () => {
     setImageUrl(null)
     setImageId(null)
-    setFile(null)
     setError(null)
   }
 
@@ -160,6 +159,7 @@ export function FileUploader() {
               type='file'
               accept='image/png, image/jpeg, image/gif'
               aria-label='Drop your image here or browse. JPG, PNG or GIF, up to 2 MB'
+              autoFocus={file !== null}
               className='peer sr-only'
               onChange={onChange}
             />

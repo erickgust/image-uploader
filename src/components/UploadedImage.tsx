@@ -98,6 +98,7 @@ export function UploadedImage({
 
       <div className='flex flex-wrap justify-center gap-3 font-mono text-sm tracking-[0.08em]'>
         <button
+          autoFocus
           onClick={handleCopy}
           className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-opacity hover:opacity-80'
         >
