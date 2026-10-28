@@ -88,7 +88,7 @@ export function UploadedImage({
             key={label}
             className='border-line min-w-0 border-r px-4 py-[9px] last:border-r-0'
           >
-            <div className='text-muted mb-1 text-[9px] tracking-[0.14em]'>
+            <div className='text-muted mb-1 text-xs tracking-[0.14em]'>
               {label}
             </div>
             <div className='truncate text-xs'>{value}</div>
@@ -96,7 +96,7 @@ export function UploadedImage({
         ))}
       </div>
 
-      <div className='flex flex-wrap justify-center gap-3 font-mono text-[11.5px] tracking-[0.08em]'>
+      <div className='flex flex-wrap justify-center gap-3 font-mono text-sm tracking-[0.08em]'>
         <button
           onClick={handleCopy}
           className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-opacity hover:opacity-80'
@@ -125,7 +125,7 @@ export function UploadedImage({
       </p>
 
       {error && (
-        <div className='animate-fadein flex items-center gap-2.5 font-mono text-[11.5px] tracking-[0.05em]'>
+        <div className='animate-fadein flex items-center gap-2.5 font-mono text-sm tracking-[0.05em]'>
           <span className='border-ink inline-flex size-4 items-center justify-center border-[1.5px] font-bold'>
             !
           </span>

@@ -7,7 +7,7 @@ export function LoadingState({ progress, fileName }: LoadingStateProps) {
   return (
     <div className='animate-fadein relative flex flex-1 flex-col items-center justify-center gap-7 overflow-hidden font-mono'>
       <div className='bg-ink animate-scan absolute inset-x-0 h-0.5 opacity-35' />
-      <span className='text-muted text-[11px] tracking-[0.2em]'>
+      <span className='text-muted text-xs tracking-[0.2em]'>
         TRANSFERRING ///
       </span>
       <div className='text-[90px] leading-none font-medium tracking-[-0.02em]'>
@@ -25,9 +25,7 @@ export function LoadingState({ progress, fileName }: LoadingStateProps) {
           style={{ width: `${progress}%` }}
         />
       </div>
-      <span className='text-muted text-[11px] tracking-[0.04em]'>
-        {fileName}
-      </span>
+      <span className='text-muted text-xs tracking-[0.04em]'>{fileName}</span>
     </div>
   )
 }

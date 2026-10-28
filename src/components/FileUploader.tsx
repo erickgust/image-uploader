@@ -134,7 +134,7 @@ export function FileUploader() {
         />
       ))}
 
-      <div className='text-muted font-mono text-[10px] tracking-[0.1em] max-sm:hidden'>
+      <div className='text-muted font-mono text-xs tracking-[0.1em] max-sm:hidden'>
         <div className='absolute top-6 left-[50px]'>HOIST://V2</div>
         <div className='absolute top-6 right-[50px]'>LIMIT 2.0MB</div>
         <div className='absolute bottom-6 left-[50px]'>FMT JPG·PNG·GIF</div>
@@ -174,14 +174,14 @@ export function FileUploader() {
                 <h1 className='font-display text-[27px] leading-[1.1] font-semibold tracking-[-0.02em]'>
                   Drop your image here
                 </h1>
-                <p className='text-muted font-mono text-[11px] tracking-[0.1em]'>
+                <p className='text-muted font-mono text-xs tracking-[0.1em]'>
                   DRAG &nbsp;·&nbsp; PASTE &nbsp;·&nbsp;{' '}
                   <span className='text-ink border-ink border-b-[1.5px] pb-px'>
                     BROWSE
                   </span>
                 </p>
               </div>
-              <p className='text-muted font-mono text-[10px] tracking-[0.12em]'>
+              <p className='text-muted font-mono text-xs tracking-[0.12em]'>
                 JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; GIF &nbsp;—&nbsp; MAX 2.0MB
               </p>
             </label>
@@ -200,7 +200,7 @@ export function FileUploader() {
 
           <div className='mt-4 min-h-4'>
             {error && (
-              <div className='animate-fadein flex items-center justify-center gap-2.5 font-mono text-[11.5px] tracking-[0.05em]'>
+              <div className='animate-fadein flex items-center justify-center gap-2.5 font-mono text-sm tracking-[0.05em]'>
                 <span className='border-ink inline-flex size-4 shrink-0 items-center justify-center border-[1.5px] font-bold'>
                   !
                 </span>
