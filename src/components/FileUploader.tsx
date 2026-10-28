@@ -61,13 +61,13 @@ export function FileUploader() {
   const handleFileUpload = async (file: File) => {
     const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB in bytes
     if (file.size > MAX_FILE_SIZE) {
-      setError('File size exceeds 2MB limit')
+      setError('Choose an image under 2 MB')
       return
     }
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
     if (!allowedTypes.includes(file.type)) {
-      setError('Invalid file type. Only JPG, PNG and GIF are allowed')
+      setError('Choose a JPG, PNG or GIF image')
       return
     }
 
@@ -104,7 +104,7 @@ export function FileUploader() {
       setImageId(data.shortUrl)
     } catch (error) {
       console.error('Error uploading file', error)
-      setError('Failed to upload file. Please try again.')
+      setError('Unable to upload. Check your connection and try again.')
     } finally {
       setIsUploading(false)
     }

@@ -8,17 +8,17 @@ export async function POST(req: NextRequest) {
     const file = formData.get('file')
 
     if (!file || !(file instanceof File)) {
-      return Response.json({ error: 'Invalid file upload' }, { status: 400 })
+      return Response.json({ error: 'Choose an image to upload' }, { status: 400 })
     }
 
     const MAX_SIZE = 2 * 1024 * 1024 // 2MB
     if (file.size > MAX_SIZE) {
-      return Response.json({ error: 'File size too large' }, { status: 400 })
+      return Response.json({ error: 'Choose an image under 2 MB' }, { status: 400 })
     }
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
     if (!allowedTypes.includes(file.type)) {
-      return Response.json({ error: 'Invalid file type' }, { status: 400 })
+      return Response.json({ error: 'Choose a JPG, PNG or GIF image' }, { status: 400 })
     }
 
     const [, fileExt] = file.type.split('/')
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     if (error) {
       console.error('Supabase storage error:', error)
-      return Response.json({ error: 'Failed to upload file' }, { status: 500 })
+      return Response.json({ error: 'Unable to upload. Try again.' }, { status: 500 })
     }
 
     const { data: url } = supabase.storage
@@ -58,6 +58,6 @@ export async function POST(req: NextRequest) {
     )
   } catch (error) {
     console.error('Upload error:', error)
-    return Response.json({ error: 'Internal server error' }, { status: 500 })
+    return Response.json({ error: 'Unable to upload. Try again.' }, { status: 500 })
   }
 }
