@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default async function FullImagePage({
   params,
@@ -15,7 +16,14 @@ export default async function FullImagePage({
     .single()
 
   if (error) {
-    return <div>Error: {error.message}</div>
+    return (
+      <div className='flex min-h-svh flex-col items-center justify-center gap-3 p-8 text-center'>
+        <p>Image not found. Check the link, or upload a new image.</p>
+        <Link href='/' className='underline'>
+          Upload an image
+        </Link>
+      </div>
+    )
   }
 
   return (
