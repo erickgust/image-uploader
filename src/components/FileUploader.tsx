@@ -144,9 +144,16 @@ export function FileUploader() {
       {isIdle && (
         <div className='relative flex flex-1 flex-col items-center justify-center p-12'>
           <Container className='w-full max-w-[540px]'>
+            <input
+              id='upload'
+              type='file'
+              accept='image/png, image/jpeg, image/gif'
+              className='peer sr-only'
+              onChange={onChange}
+            />
             <label
               htmlFor='upload'
-              className='group hover:bg-bg2 flex min-h-[46vh] cursor-pointer flex-col items-center justify-center gap-[22px] p-9 text-center transition-colors'
+              className='group hover:bg-bg2 peer-focus-visible:outline-ink flex min-h-[46vh] cursor-pointer flex-col items-center justify-center gap-[22px] p-9 text-center transition-colors peer-focus-visible:outline-2 peer-focus-visible:-outline-offset-4'
             >
               <div className='border-ink group-hover:bg-ink group-hover:text-bg flex size-[60px] items-center justify-center border-[1.5px] transition duration-150 group-hover:-translate-y-[3px]'>
                 <UploadIcon />
@@ -166,13 +173,6 @@ export function FileUploader() {
                 JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; GIF &nbsp;—&nbsp; MAX 2.0MB
               </p>
             </label>
-            <input
-              id='upload'
-              type='file'
-              accept='image/png, image/jpeg, image/gif'
-              className='hidden'
-              onChange={onChange}
-            />
 
             {isDragging && (
               <div className='bg-bg2 border-ink animate-popin absolute inset-0 flex flex-col items-center justify-center gap-[18px] border-[1.5px]'>
