@@ -2,7 +2,7 @@ import { DM_Sans, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import clsx from 'clsx'
 import './globals.css'
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -25,6 +25,13 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'ImageUpload',
   description: 'Upload images and share them with others.',
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0b' },
+  ],
 }
 
 export default function RootLayout({
