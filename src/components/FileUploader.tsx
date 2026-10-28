@@ -134,12 +134,12 @@ export function FileUploader() {
         />
       ))}
 
-      <div className='text-muted font-mono text-xs tracking-[0.1em] max-sm:hidden'>
-        <div className='absolute top-6 left-[50px]'>HOIST://V2</div>
-        <div className='absolute top-6 right-[50px]'>LIMIT 2.0MB</div>
-        <div className='absolute bottom-6 left-[50px]'>FMT JPG·PNG·GIF</div>
+      <div className='text-muted font-mono text-xs tracking-[0.1em] uppercase max-sm:hidden'>
+        <div className='absolute top-6 left-[50px]'>hoist://v2</div>
+        <div className='absolute top-6 right-[50px]'>Limit 2.0MB</div>
+        <div className='absolute bottom-6 left-[50px]'>Fmt JPG·PNG·GIF</div>
         <div className='absolute right-[50px] bottom-6 flex items-center gap-[7px]'>
-          {isUploading ? 'BUSY' : isDone ? 'DONE' : 'READY'}
+          {isUploading ? 'Busy' : isDone ? 'Done' : 'Ready'}
           <span className='bg-ink animate-blink size-[7px]' />
         </div>
       </div>
@@ -174,15 +174,15 @@ export function FileUploader() {
                 <h1 className='font-display text-[27px] leading-[1.1] font-semibold tracking-[-0.02em]'>
                   Drop your image here
                 </h1>
-                <p className='text-muted font-mono text-xs tracking-[0.1em]'>
-                  DRAG &nbsp;·&nbsp; PASTE &nbsp;·&nbsp;{' '}
+                <p className='text-muted font-mono text-xs tracking-[0.1em] uppercase'>
+                  Drag &nbsp;·&nbsp; Paste &nbsp;·&nbsp;{' '}
                   <span className='text-ink border-ink border-b-[1.5px] pb-px'>
-                    BROWSE
+                    Browse
                   </span>
                 </p>
               </div>
-              <p className='text-muted font-mono text-xs tracking-[0.12em]'>
-                JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; GIF &nbsp;—&nbsp; MAX 2.0MB
+              <p className='text-muted font-mono text-xs tracking-[0.12em] uppercase'>
+                JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; GIF &nbsp;—&nbsp; max 2.0MB
               </p>
             </label>
 
@@ -192,7 +192,7 @@ export function FileUploader() {
                   <UploadIcon />
                 </div>
                 <h2 className='font-display text-[23px] font-semibold tracking-[-0.02em]'>
-                  Release to transfer
+                  Release to upload
                 </h2>
               </div>
             )}

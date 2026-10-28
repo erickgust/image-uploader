@@ -58,10 +58,10 @@ export function UploadedImage({
   }
 
   const meta = [
-    ['FORMAT', file.type.split('/')[1].toUpperCase()],
-    ['SIZE', formatSize(file.size)],
-    ['DIMENSIONS', dimensions],
-    ['LINK', imageId.replace(/^https?:\/\//, '')],
+    ['Format', file.type.split('/')[1].toUpperCase()],
+    ['Size', formatSize(file.size)],
+    ['Dimensions', dimensions],
+    ['Link', imageId.replace(/^https?:\/\//, '')],
   ]
 
   return (
@@ -88,7 +88,7 @@ export function UploadedImage({
             key={label}
             className='border-line min-w-0 border-r px-4 py-[9px] last:border-r-0'
           >
-            <div className='text-muted mb-1 text-xs tracking-[0.14em]'>
+            <div className='text-muted mb-1 text-xs tracking-[0.14em] uppercase'>
               {label}
             </div>
             <div className='truncate text-xs'>{value}</div>
@@ -99,21 +99,21 @@ export function UploadedImage({
       <div className='flex flex-wrap justify-center gap-3 font-mono text-sm tracking-[0.08em]'>
         <button
           onClick={handleCopy}
-          className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-opacity hover:opacity-80'
+          className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-opacity hover:opacity-80'
         >
-          [ {isCopied ? 'LINK COPIED' : 'COPY LINK'} ]
+          [ {isCopied ? 'Link copied' : 'Copy link'} ]
         </button>
         <button
           onClick={handleDownload}
-          className='border-ink hover:bg-ink hover:text-bg cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-colors'
+          className='border-ink hover:bg-ink hover:text-bg cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-colors'
         >
-          [ DOWNLOAD ]
+          [ Download ]
         </button>
         <button
           onClick={onReset}
-          className='text-muted border-line hover:text-ink hover:border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-colors'
+          className='text-muted border-line hover:text-ink hover:border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-colors'
         >
-          [ + NEW ]
+          [ + New ]
         </button>
       </div>
 

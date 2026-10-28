@@ -27,10 +27,15 @@ export default async function FullImagePage({
   }
 
   return (
-    <div className='flex min-h-svh w-full p-8'>
+    <main className='flex min-h-svh w-full p-8'>
       <div className='relative grow'>
-        <Image fill className='object-contain' src={data.url} alt='' />
+        <Image
+          fill
+          className='object-contain'
+          src={data.url}
+          alt='Shared image'
+        />
       </div>
-    </div>
+    </main>
   )
 }
