@@ -4,17 +4,17 @@ export function Logo() {
   return (
     <>
       <Image
-        src='/imageupload-lockup-light.svg'
-        alt='imageupload'
-        width={190}
+        src='/hoist-lockup-light.svg'
+        alt='hoist'
+        width={89}
         height={30}
         priority
         className='dark:hidden'
       />
       <Image
-        src='/imageupload-lockup-dark.svg'
-        alt='imageupload'
-        width={190}
+        src='/hoist-lockup-dark.svg'
+        alt='hoist'
+        width={89}
         height={30}
         priority
         className='hidden dark:block'

@@ -1,6 +1,6 @@
 {
-  "name": "imageupload",
-  "short_name": "imageupload",
+  "name": "hoist",
+  "short_name": "hoist",
   "icons": [
     {
       "src": "/icon-192.png",

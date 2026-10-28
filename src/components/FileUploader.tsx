@@ -132,7 +132,7 @@ export function FileUploader() {
       ))}
 
       <div className='text-muted font-mono text-[10px] tracking-[0.1em]'>
-        <div className='absolute top-6 left-[50px]'>IMG://UPLOAD.V2</div>
+        <div className='absolute top-6 left-[50px]'>HOIST://V2</div>
         <div className='absolute top-6 right-[50px]'>LIMIT 2.0MB</div>
         <div className='absolute bottom-6 left-[50px]'>FMT JPG·PNG·GIF</div>
         <div className='absolute right-[50px] bottom-6 flex items-center gap-[7px]'>
