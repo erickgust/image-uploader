@@ -66,6 +66,22 @@
   }
 }
 
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-popin,
+  .animate-fadein {
+    animation-name: fade;
+  }
+  .animate-scan {
+    display: none;
+  }
+}
+
 @layer base {
   *,
   ::after,

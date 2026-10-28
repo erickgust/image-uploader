@@ -155,7 +155,7 @@ export function FileUploader() {
               htmlFor='upload'
               className='group hover:bg-bg2 peer-focus-visible:outline-ink flex min-h-[46vh] cursor-pointer flex-col items-center justify-center gap-[22px] p-9 text-center transition-colors peer-focus-visible:outline-2 peer-focus-visible:-outline-offset-4'
             >
-              <div className='border-ink group-hover:bg-ink group-hover:text-bg flex size-[60px] items-center justify-center border-[1.5px] transition duration-150 group-hover:-translate-y-[3px]'>
+              <div className='border-ink group-hover:bg-ink group-hover:text-bg flex size-[60px] items-center justify-center border-[1.5px] transition duration-150 motion-safe:group-hover:-translate-y-[3px]'>
                 <UploadIcon />
               </div>
               <div className='flex flex-col gap-2.5'>
