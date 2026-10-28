@@ -119,7 +119,7 @@ export function FileUploader() {
 
   return (
     <section
-      className='bg-bg relative flex-1 overflow-hidden'
+      className='bg-bg relative flex flex-1'
       {...(isIdle ? dragHandlers : {})}
     >
       <div className='pointer-events-none absolute inset-0 bg-[linear-gradient(var(--grid)_1px,transparent_1px),linear-gradient(90deg,var(--grid)_1px,transparent_1px)] bg-[size:42px_42px]' />
@@ -131,7 +131,7 @@ export function FileUploader() {
         />
       ))}
 
-      <div className='text-muted font-mono text-[10px] tracking-[0.1em]'>
+      <div className='text-muted font-mono text-[10px] tracking-[0.1em] max-sm:hidden'>
         <div className='absolute top-6 left-[50px]'>HOIST://V2</div>
         <div className='absolute top-6 right-[50px]'>LIMIT 2.0MB</div>
         <div className='absolute bottom-6 left-[50px]'>FMT JPG·PNG·GIF</div>
@@ -142,11 +142,11 @@ export function FileUploader() {
       </div>
 
       {isIdle && (
-        <div className='absolute inset-0 flex items-center justify-center p-12'>
+        <div className='relative flex flex-1 flex-col items-center justify-center p-12'>
           <Container className='w-full max-w-[540px]'>
             <label
               htmlFor='upload'
-              className='group hover:bg-bg2 flex h-[46vh] min-h-[330px] cursor-pointer flex-col items-center justify-center gap-[22px] p-9 text-center transition-colors'
+              className='group hover:bg-bg2 flex min-h-[46vh] cursor-pointer flex-col items-center justify-center gap-[22px] p-9 text-center transition-colors'
             >
               <div className='border-ink group-hover:bg-ink group-hover:text-bg flex size-[60px] items-center justify-center border-[1.5px] transition duration-150 group-hover:-translate-y-[3px]'>
                 <UploadIcon />
@@ -184,16 +184,18 @@ export function FileUploader() {
                 </h2>
               </div>
             )}
+          </Container>
 
+          <div className='mt-4 min-h-4'>
             {error && (
-              <div className='animate-fadein absolute inset-x-0 top-[calc(100%+16px)] flex items-center justify-center gap-2.5 font-mono text-[11.5px] tracking-[0.05em]'>
-                <span className='border-ink inline-flex size-4 items-center justify-center border-[1.5px] font-bold'>
+              <div className='animate-fadein flex items-center justify-center gap-2.5 font-mono text-[11.5px] tracking-[0.05em]'>
+                <span className='border-ink inline-flex size-4 shrink-0 items-center justify-center border-[1.5px] font-bold'>
                   !
                 </span>
                 <span>ERR · {error}</span>
               </div>
             )}
-          </Container>
+          </div>
         </div>
       )}
 

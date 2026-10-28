@@ -65,7 +65,7 @@ export function UploadedImage({
   ]
 
   return (
-    <div className='animate-fadein absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 py-14 sm:px-10'>
+    <div className='animate-fadein relative flex flex-1 flex-col items-center justify-center gap-6 px-4 py-14 sm:px-10'>
       <Container className='max-w-[min(620px,82vw)] p-2'>
         <NextImage
           src={imageUrl}

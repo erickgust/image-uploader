@@ -5,7 +5,7 @@ interface LoadingStateProps {
 
 export function LoadingState({ progress, fileName }: LoadingStateProps) {
   return (
-    <div className='animate-fadein absolute inset-0 flex flex-col items-center justify-center gap-7 font-mono'>
+    <div className='animate-fadein relative flex flex-1 flex-col items-center justify-center gap-7 overflow-hidden font-mono'>
       <div className='bg-ink animate-scan absolute inset-x-0 h-0.5 opacity-35' />
       <span className='text-muted text-[11px] tracking-[0.2em]'>
         TRANSFERRING ///
