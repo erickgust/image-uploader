@@ -5,10 +5,24 @@ import { Container } from './Container'
 interface UploadedImageProps {
   imageUrl: string
   imageId: string
+  file: File
+  onReset: () => void
 }
 
-export function UploadedImage({ imageUrl, imageId }: UploadedImageProps) {
+function formatSize(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+export function UploadedImage({
+  imageUrl,
+  imageId,
+  file,
+  onReset,
+}: UploadedImageProps) {
   const [isCopied, setIsCopied] = useState(false)
+  const [dimensions, setDimensions] = useState('—')
 
   const handleDownload = async () => {
     const response = await fetch(imageUrl)
@@ -17,54 +31,73 @@ export function UploadedImage({ imageUrl, imageId }: UploadedImageProps) {
 
     const link = document.createElement('a')
     link.href = blobUrl
-    link.download = 'image.png'
+    link.download = file.name
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
   }
 
+  const meta = [
+    ['FORMAT', file.type.split('/')[1].toUpperCase()],
+    ['SIZE', formatSize(file.size)],
+    ['DIMENSIONS', dimensions],
+    ['LINK', imageId.replace(/^https?:\/\//, '')],
+  ]
+
   return (
-    <div className='flex w-full max-w-[33.75rem] flex-col items-center gap-6'>
-      <Container className='w-full p-2'>
-        <div className='relative aspect-video w-full'>
-          <NextImage
-            fill
-            src={imageUrl}
-            alt='Uploaded image'
-            className='rounded-lg object-contain'
-          />
-        </div>
+    <div className='animate-fadein absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 py-14 sm:px-10'>
+      <Container className='max-w-[min(620px,82vw)] p-2'>
+        <NextImage
+          src={imageUrl}
+          alt='Uploaded image'
+          width={0}
+          height={0}
+          sizes='620px'
+          className='block h-auto max-h-[42vh] w-auto max-w-full object-contain'
+          onLoad={(e) =>
+            setDimensions(
+              `${e.currentTarget.naturalWidth} × ${e.currentTarget.naturalHeight}`,
+            )
+          }
+        />
       </Container>
 
-      <div className='flex gap-3'>
+      <div className='border-line flex max-w-full flex-wrap border font-mono'>
+        {meta.map(([label, value]) => (
+          <div
+            key={label}
+            className='border-line min-w-0 border-r px-4 py-[9px] last:border-r-0'
+          >
+            <div className='text-muted mb-1 text-[9px] tracking-[0.14em]'>
+              {label}
+            </div>
+            <div className='truncate text-xs'>{value}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className='flex flex-wrap justify-center gap-3 font-mono text-[11.5px] tracking-[0.08em]'>
         <button
           onClick={() => {
             navigator.clipboard.writeText(imageId)
             setIsCopied(true)
+            setTimeout(() => setIsCopied(false), 1800)
           }}
-          ref={(e) => {
-            if (!e) return
-
-            setTimeout(() => {
-              setIsCopied(false)
-            }, 2000)
-          }}
-          className='flex cursor-pointer items-center gap-1 rounded-lg bg-[#3662E3] px-3 py-1.5 text-[0.625rem] font-semibold text-white'
+          className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-opacity hover:opacity-80'
         >
-          <NextImage src='/link.svg' width={12} height={12} alt='Share' />
-          <span>{isCopied ? 'Copied!' : 'Share'}</span>
+          [ {isCopied ? 'LINK COPIED' : 'COPY LINK'} ]
         </button>
         <button
           onClick={handleDownload}
-          className='flex cursor-pointer items-center gap-1 rounded-lg bg-[#3662E3] px-3 py-1.5 text-[0.625rem] font-semibold text-white'
+          className='border-ink hover:bg-ink hover:text-bg cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-colors'
         >
-          <NextImage
-            src='/download.svg'
-            width={12}
-            height={12}
-            alt='Download'
-          />
-          <span>Download</span>
+          [ DOWNLOAD ]
+        </button>
+        <button
+          onClick={onReset}
+          className='text-muted border-line hover:text-ink hover:border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] transition-colors'
+        >
+          [ + NEW ]
         </button>
       </div>
     </div>

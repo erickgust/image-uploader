@@ -6,15 +6,13 @@ import Link from 'next/link'
 export default function Home() {
   return (
     <div className='flex min-h-screen flex-col'>
-      <header className='border-b border-gray-200 px-8 py-4 sm:px-18 dark:border-gray-600'>
-        <div className='max-w-8xl mx-auto flex items-center justify-between'>
-          <Link href='/' aria-label='Home'>
-            <Logo />
-          </Link>
-          <ThemeToggle />
-        </div>
+      <header className='border-line relative z-30 flex items-center justify-between border-b px-[26px] py-[18px]'>
+        <Link href='/' aria-label='Home'>
+          <Logo />
+        </Link>
+        <ThemeToggle />
       </header>
-      <main className='grid h-full flex-1 place-items-center px-8 sm:px-18'>
+      <main className='relative flex min-h-0 flex-1'>
         <FileUploader />
       </main>
     </div>

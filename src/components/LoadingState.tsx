@@ -1,17 +1,28 @@
-import { Container } from './Container'
+interface LoadingStateProps {
+  progress: number
+  fileName: string
+}
 
-export function LoadingState() {
+export function LoadingState({ progress, fileName }: LoadingStateProps) {
   return (
-    <Container className='w-full max-w-[30rem] px-8 py-8 sm:px-20'>
-      <div className='flex h-full flex-col items-center justify-center gap-4'>
-        <p className='text-center text-sm font-medium'>
-          <strong>Uploading</strong>, please wait..
-        </p>
-
-        <div className='h-1.5 w-full max-w-80 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-600'>
-          <div className='animate-loading-bar h-1.5 w-14 rounded-full bg-[#3662E3]' />
-        </div>
+    <div className='animate-fadein absolute inset-0 flex flex-col items-center justify-center gap-7 font-mono'>
+      <div className='bg-ink animate-scan absolute inset-x-0 h-0.5 opacity-35' />
+      <span className='text-muted text-[11px] tracking-[0.2em]'>
+        TRANSFERRING ///
+      </span>
+      <div className='text-[90px] leading-none font-medium tracking-[-0.02em]'>
+        {String(progress).padStart(3, '0')}
+        <span className='text-muted text-[34px]'>%</span>
       </div>
-    </Container>
+      <div className='bg-line relative h-0.5 w-[min(440px,70vw)] overflow-hidden'>
+        <div
+          className='bg-ink absolute inset-y-0 left-0 transition-[width] duration-100 ease-linear'
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <span className='text-muted text-[11px] tracking-[0.04em]'>
+        {fileName}
+      </span>
+    </div>
   )
 }

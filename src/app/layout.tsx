@@ -1,13 +1,25 @@
-import { Inter } from 'next/font/google'
+import { DM_Sans, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import clsx from 'clsx'
 import './globals.css'
 import { Metadata } from 'next'
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-dm-sans',
+})
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-space-grotesk',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
 })
 
 export const metadata: Metadata = {
@@ -24,8 +36,10 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body
         className={clsx(
-          inter.variable,
-          'bg-main-light dark:bg-main-dark antialiased',
+          dmSans.variable,
+          spaceGrotesk.variable,
+          jetbrainsMono.variable,
+          'bg-bg text-ink font-sans antialiased',
         )}
       >
         <ThemeProvider attribute='class' enableSystem disableTransitionOnChange>

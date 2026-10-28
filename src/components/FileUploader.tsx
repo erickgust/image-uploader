@@ -1,6 +1,6 @@
 'use client'
 
-import NextImage from 'next/image'
+import clsx from 'clsx'
 import { useState } from 'react'
 import { useDragAndDrop } from '@/hooks/useDragAndDrop'
 import { usePasteFile } from '@/hooks/usePasteFile'
@@ -8,11 +8,36 @@ import { Container } from './Container'
 import { LoadingState } from './LoadingState'
 import { UploadedImage } from './UploadedImage'
 
+const hudCorners = [
+  'top-[22px] left-[22px] border-t-[1.5px] border-l-[1.5px]',
+  'top-[22px] right-[22px] border-t-[1.5px] border-r-[1.5px]',
+  'bottom-[22px] left-[22px] border-b-[1.5px] border-l-[1.5px]',
+  'bottom-[22px] right-[22px] border-b-[1.5px] border-r-[1.5px]',
+]
+
+function UploadIcon() {
+  return (
+    <svg width='25' height='25' viewBox='0 0 24 24' fill='none' aria-hidden>
+      <path
+        d='M12 19 V6 M6 12 L12 6 L18 12'
+        stroke='currentColor'
+        strokeWidth='1.6'
+        strokeLinecap='square'
+      />
+    </svg>
+  )
+}
+
 export function FileUploader() {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [imageId, setImageId] = useState<string | null>(null)
+  const [file, setFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+
+  const isDone = Boolean(imageUrl && imageId && file)
+  const isIdle = !isUploading && !isDone
 
   const { isDragging, dragHandlers } = useDragAndDrop({
     onDrop: (file) => handleFileUpload(file),
@@ -20,7 +45,7 @@ export function FileUploader() {
 
   usePasteFile({
     onPaste: (file) => handleFileUpload(file),
-    isDisabled: Boolean(imageId) || isUploading,
+    isDisabled: !isIdle,
   })
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +55,7 @@ export function FileUploader() {
     if (!files) return
 
     handleFileUpload(files[0])
+    e.target.value = ''
   }
 
   const handleFileUpload = async (file: File) => {
@@ -45,6 +71,8 @@ export function FileUploader() {
       return
     }
 
+    setFile(file)
+    setProgress(0)
     setIsUploading(true)
     setError(null)
 
@@ -52,12 +80,25 @@ export function FileUploader() {
     formData.append('file', file)
 
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const data = await response.json()
+      // XHR instead of fetch: fetch has no upload progress events
+      const data = await new Promise<{ url: string; shortUrl: string }>(
+        (resolve, reject) => {
+          const xhr = new XMLHttpRequest()
+          xhr.open('POST', '/api/upload')
+          xhr.responseType = 'json'
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              setProgress(Math.round((e.loaded / e.total) * 100))
+            }
+          }
+          xhr.onload = () =>
+            xhr.status === 200
+              ? resolve(xhr.response)
+              : reject(new Error(xhr.response?.error))
+          xhr.onerror = () => reject(new Error('Network error'))
+          xhr.send(formData)
+        },
+      )
 
       setImageUrl(data.url)
       setImageId(data.shortUrl)
@@ -69,62 +110,105 @@ export function FileUploader() {
     }
   }
 
-  if (isUploading && !imageUrl) {
-    return <LoadingState />
-  }
-
-  if (imageUrl && imageId) {
-    return <UploadedImage imageUrl={imageUrl} imageId={imageId} />
+  const reset = () => {
+    setImageUrl(null)
+    setImageId(null)
+    setFile(null)
+    setError(null)
   }
 
   return (
-    <Container className='w-full max-w-[33.75rem] p-2'>
-      <div
-        className='group relative rounded-lg border-2 border-dashed border-gray-200 data-[dragging=true]:border-[#3662E3] dark:border-gray-600'
-        {...dragHandlers}
-        data-dragging={isDragging}
-      >
-        {isDragging && (
-          <div className='absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#3662E3]/10'>
-            <p className='text-sm font-medium'>Drop files here</p>
-          </div>
-        )}
+    <section
+      className='bg-bg relative flex-1 overflow-hidden'
+      {...(isIdle ? dragHandlers : {})}
+    >
+      <div className='pointer-events-none absolute inset-0 bg-[linear-gradient(var(--grid)_1px,transparent_1px),linear-gradient(90deg,var(--grid)_1px,transparent_1px)] bg-[size:42px_42px]' />
 
-        <div className='flex flex-col items-center justify-center py-28 group-data-[dragging=true]:opacity-0'>
-          <div className='mb-5'>
-            <NextImage
-              src='/exit.svg'
-              priority
-              width={32}
-              height={32}
-              alt='Upload'
-              unoptimized
-            />
-          </div>
+      {hudCorners.map((corner) => (
+        <div
+          key={corner}
+          className={clsx('border-ink absolute size-4', corner)}
+        />
+      ))}
 
-          <div className='text-center'>
-            {error && (
-              <p className='mb-2 text-sm font-medium text-red-500'>{error}</p>
-            )}
-            <p className='mb-2 text-sm font-medium'>
-              Drag & drop a file or{' '}
-              <label htmlFor='upload' className='cursor-pointer text-[#3662E3]'>
-                browse files
-              </label>
-              <input
-                id='upload'
-                type='file'
-                accept='image/png, image/jpeg, image/gif'
-                className='hidden'
-                onChange={onChange}
-              />
-            </p>
-            <p className='text-xs font-light'>
-              JPG, PNG or GIF - Max file size 2MB
-            </p>
-          </div>
+      <div className='text-muted font-mono text-[10px] tracking-[0.1em]'>
+        <div className='absolute top-6 left-[50px]'>IMG://UPLOAD.V2</div>
+        <div className='absolute top-6 right-[50px]'>LIMIT 2.0MB</div>
+        <div className='absolute bottom-6 left-[50px]'>FMT JPG·PNG·GIF</div>
+        <div className='absolute right-[50px] bottom-6 flex items-center gap-[7px]'>
+          {isUploading ? 'BUSY' : isDone ? 'DONE' : 'READY'}
+          <span className='bg-ink animate-blink size-[7px]' />
         </div>
       </div>
-    </Container>
+
+      {isIdle && (
+        <div className='absolute inset-0 flex items-center justify-center p-12'>
+          <Container className='w-full max-w-[540px]'>
+            <label
+              htmlFor='upload'
+              className='group hover:bg-bg2 flex h-[46vh] min-h-[330px] cursor-pointer flex-col items-center justify-center gap-[22px] p-9 text-center transition-colors'
+            >
+              <div className='border-ink group-hover:bg-ink group-hover:text-bg flex size-[60px] items-center justify-center border-[1.5px] transition duration-150 group-hover:-translate-y-[3px]'>
+                <UploadIcon />
+              </div>
+              <div className='flex flex-col gap-2.5'>
+                <h1 className='font-display text-[27px] leading-[1.1] font-semibold tracking-[-0.02em]'>
+                  Drop your image here
+                </h1>
+                <p className='text-muted font-mono text-[11px] tracking-[0.1em]'>
+                  DRAG &nbsp;·&nbsp; PASTE &nbsp;·&nbsp;{' '}
+                  <span className='text-ink border-ink border-b-[1.5px] pb-px'>
+                    BROWSE
+                  </span>
+                </p>
+              </div>
+              <p className='text-muted font-mono text-[10px] tracking-[0.12em]'>
+                JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; GIF &nbsp;—&nbsp; MAX 2.0MB
+              </p>
+            </label>
+            <input
+              id='upload'
+              type='file'
+              accept='image/png, image/jpeg, image/gif'
+              className='hidden'
+              onChange={onChange}
+            />
+
+            {isDragging && (
+              <div className='bg-bg2 border-ink animate-popin absolute inset-0 flex flex-col items-center justify-center gap-[18px] border-[1.5px]'>
+                <div className='bg-ink text-bg flex size-[60px] items-center justify-center'>
+                  <UploadIcon />
+                </div>
+                <h2 className='font-display text-[23px] font-semibold tracking-[-0.02em]'>
+                  Release to transfer
+                </h2>
+              </div>
+            )}
+
+            {error && (
+              <div className='animate-fadein absolute inset-x-0 top-[calc(100%+16px)] flex items-center justify-center gap-2.5 font-mono text-[11.5px] tracking-[0.05em]'>
+                <span className='border-ink inline-flex size-4 items-center justify-center border-[1.5px] font-bold'>
+                  !
+                </span>
+                <span>ERR · {error}</span>
+              </div>
+            )}
+          </Container>
+        </div>
+      )}
+
+      {isUploading && file && (
+        <LoadingState progress={progress} fileName={file.name} />
+      )}
+
+      {isDone && (
+        <UploadedImage
+          imageUrl={imageUrl!}
+          imageId={imageId!}
+          file={file!}
+          onReset={reset}
+        />
+      )}
+    </section>
   )
 }
