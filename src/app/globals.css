@@ -80,6 +80,9 @@
   .animate-scan {
     display: none;
   }
+  .animate-blink {
+    animation: none;
+  }
 }
 
 @layer base {
