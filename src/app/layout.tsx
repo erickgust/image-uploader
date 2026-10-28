@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'ImageUpload',
+  title: 'imageupload · Upload and share images',
   description: 'Upload images and share them with others.',
 }
 
