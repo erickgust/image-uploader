@@ -14,7 +14,12 @@ export function LoadingState({ progress, fileName }: LoadingStateProps) {
         {String(progress).padStart(3, '0')}
         <span className='text-muted text-[34px]'>%</span>
       </div>
-      <div className='bg-line relative h-0.5 w-[min(440px,70vw)] overflow-hidden'>
+      <div
+        role='progressbar'
+        aria-label='Upload progress'
+        aria-valuenow={progress}
+        className='bg-line relative h-0.5 w-[min(440px,70vw)] overflow-hidden'
+      >
         <div
           className='bg-ink absolute inset-y-0 left-0 transition-[width] duration-100 ease-linear'
           style={{ width: `${progress}%` }}

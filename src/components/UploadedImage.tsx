@@ -117,6 +117,13 @@ export function UploadedImage({
         </button>
       </div>
 
+      <p role='alert' className='sr-only'>
+        {error}
+      </p>
+      <p role='status' className='sr-only'>
+        {isCopied ? 'Link copied' : ''}
+      </p>
+
       {error && (
         <div className='animate-fadein flex items-center gap-2.5 font-mono text-[11.5px] tracking-[0.05em]'>
           <span className='border-ink inline-flex size-4 items-center justify-center border-[1.5px] font-bold'>

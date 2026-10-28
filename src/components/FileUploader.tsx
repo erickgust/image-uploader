@@ -141,6 +141,14 @@ export function FileUploader() {
         </div>
       </div>
 
+      <p role='alert' className='sr-only'>
+        {error}
+      </p>
+      <p role='status' className='sr-only'>
+        {isUploading && `Uploading ${file?.name}`}
+        {isDone && 'Upload complete'}
+      </p>
+
       {isIdle && (
         <div className='relative flex flex-1 flex-col items-center justify-center p-12'>
           <Container className='w-full max-w-[540px]'>
