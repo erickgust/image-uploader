@@ -10,7 +10,9 @@ export function ThemeToggle() {
       className='border-line hover:border-ink flex size-8 cursor-pointer items-center justify-center border transition-colors duration-150'
       onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
     >
-      <span className='sr-only'>Toggle Theme</span>
+      <span className='sr-only'>
+        Switch to {resolvedTheme === 'dark' ? 'light' : 'dark'} theme
+      </span>
 
       <svg width='15' height='15' viewBox='0 0 14 14' aria-hidden>
         <circle
