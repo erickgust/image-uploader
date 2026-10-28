@@ -95,7 +95,7 @@ export function FileUploader() {
             xhr.status === 200
               ? resolve(xhr.response)
               : reject(new Error(xhr.response?.error))
-          xhr.onerror = () => reject(new Error('Network error'))
+          xhr.onerror = () => reject(new Error())
           xhr.send(formData)
         },
       )
@@ -104,7 +104,10 @@ export function FileUploader() {
       setImageId(data.shortUrl)
     } catch (error) {
       console.error('Error uploading file', error)
-      setError('Unable to upload. Check your connection and try again.')
+      setError(
+        (error as Error).message ||
+          'Unable to upload. Check your connection and try again.',
+      )
     } finally {
       setIsUploading(false)
     }
