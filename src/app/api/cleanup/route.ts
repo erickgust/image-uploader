@@ -1,7 +1,6 @@
 import { supabase } from '@/lib/supabase'
+import { RETENTION_DAYS } from '@/lib/upload'
 import { NextRequest } from 'next/server'
-
-const RETENTION_DAYS = 30
 
 export async function GET(req: NextRequest) {
   if (

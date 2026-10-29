@@ -67,7 +67,7 @@ export function FileUploader() {
 
   const handleFileUpload = async (file: File) => {
     if (file.size > MAX_FILE_SIZE) {
-      showError('Choose an image under 2 MB')
+      showError('Choose an image under 4 MB')
       return
     }
 
@@ -143,7 +143,7 @@ export function FileUploader() {
 
       <div className='text-muted font-mono text-xs tracking-widest uppercase max-sm:hidden'>
         <div className='absolute top-6 left-12.5'>hoist://v2</div>
-        <div className='absolute top-6 right-12.5'>Limit 2.0MB</div>
+        <div className='absolute top-6 right-12.5'>Limit 4.0MB</div>
         <div className='absolute bottom-6 left-12.5'>Fmt JPG·PNG·GIF</div>
         <div className='absolute right-12.5 bottom-6 flex items-center gap-1.75'>
           {isUploading ? 'Busy' : isDone ? 'Done' : 'Ready'}
@@ -171,7 +171,7 @@ export function FileUploader() {
               id='upload'
               type='file'
               accept={ALLOWED_TYPES.join(', ')}
-              aria-label='Drop your image here or browse. JPG, PNG or GIF, up to 2 MB'
+              aria-label='Drop your image here or browse. JPG, PNG or GIF, up to 4 MB'
               autoFocus={file !== null}
               className='peer sr-only'
               onChange={onChange}
@@ -195,7 +195,7 @@ export function FileUploader() {
                 </p>
               </div>
               <p className='text-muted font-mono text-xs tracking-[0.12em] uppercase'>
-                JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; GIF &nbsp;—&nbsp; max 2.0MB
+                JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; GIF &nbsp;—&nbsp; max 4.0MB
               </p>
             </label>
 

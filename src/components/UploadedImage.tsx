@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import NextImage from 'next/image'
 import { useRef, useState } from 'react'
+import { RETENTION_DAYS } from '@/lib/upload'
 import { Container } from './Container'
 
 interface UploadedImageProps {
@@ -52,6 +53,7 @@ export function UploadedImage({
     ['Format', file.type.split('/')[1].toUpperCase()],
     ['Size', formatSize(file.size)],
     ['Dimensions', dimensions],
+    ['Expires', `In ${RETENTION_DAYS} days`],
     ['Link', shortUrl.replace(/^https?:\/\//, '')],
   ]
 

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     if (file.size > MAX_FILE_SIZE) {
       return Response.json(
-        { error: 'Choose an image under 2 MB' },
+        { error: 'Choose an image under 4 MB' },
         { status: 400 },
       )
     }
