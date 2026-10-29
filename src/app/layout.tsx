@@ -48,6 +48,8 @@ export default function RootLayout({
           jetbrainsMono.variable,
           'bg-bg text-ink font-sans antialiased',
         )}
+        // browser extensions (e.g. ColorZilla's cz-shortcut-listen) inject attributes on <body>
+        suppressHydrationWarning
       >
         <ThemeProvider attribute='class' enableSystem disableTransitionOnChange>
           {children}
