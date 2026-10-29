@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import NextImage from 'next/image'
 import { useRef, useState } from 'react'
 import { Container } from './Container'
@@ -24,6 +25,7 @@ export function UploadedImage({
   const [isCopied, setIsCopied] = useState(false)
   const [dimensions, setDimensions] = useState('—')
   const [error, setError] = useState<string | null>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
   const copiedTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const handleDownload = async () => {
@@ -68,28 +70,49 @@ export function UploadedImage({
 
   return (
     <div className='animate-fadein relative flex flex-1 flex-col items-center justify-center gap-6 px-4 py-14 sm:px-10'>
-      <Container className='max-w-[min(620px,82vw)] p-2'>
-        <NextImage
-          src={imageUrl}
-          alt='Uploaded image'
-          loading='eager'
-          width={0}
-          height={0}
-          sizes='620px'
-          className='block h-auto max-h-[42vh] w-auto max-w-full object-contain'
-          onLoad={(e) =>
-            setDimensions(
-              `${e.currentTarget.naturalWidth} × ${e.currentTarget.naturalHeight}`,
-            )
-          }
-        />
+      <Container
+        className={clsx(
+          'max-w-[min(620px,82vw)] p-2',
+          !isLoaded && 'opacity-0',
+        )}
+      >
+        <div
+          className={clsx(
+            'flex items-center overflow-hidden transition-[height] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] [interpolate-size:allow-keywords] motion-reduce:transition-none',
+            isLoaded ? 'h-auto' : 'h-0',
+          )}
+        >
+          <NextImage
+            src={imageUrl}
+            alt='Uploaded image'
+            loading='eager'
+            width={0}
+            height={0}
+            sizes='620px'
+            className='block h-auto max-h-[42vh] w-auto max-w-full object-contain'
+            onLoad={(e) => {
+              setDimensions(
+                `${e.currentTarget.naturalWidth} × ${e.currentTarget.naturalHeight}`,
+              )
+              setIsLoaded(true)
+            }}
+            onError={() => setIsLoaded(true)}
+          />
+        </div>
       </Container>
 
-      <div className='border-line flex max-w-full flex-wrap border font-mono'>
+      <div
+        className={clsx(
+          'border-line flex max-w-full flex-wrap border font-mono',
+          isLoaded
+            ? 'animate-[fade_250ms_var(--ease-out-quint)_200ms_backwards]'
+            : 'opacity-0',
+        )}
+      >
         {meta.map(([label, value]) => (
           <div
             key={label}
-            className='border-line min-w-0 border-r px-4 py-[9px] last:border-r-0'
+            className='border-line min-w-0 border-r px-4 py-2.25 last:border-r-0'
           >
             <div className='text-muted mb-1 text-xs tracking-[0.14em] uppercase'>
               {label}
@@ -99,11 +122,18 @@ export function UploadedImage({
         ))}
       </div>
 
-      <div className='flex flex-wrap justify-center gap-3 font-mono text-sm tracking-[0.08em]'>
+      <div
+        className={clsx(
+          'flex flex-wrap justify-center gap-3 font-mono text-sm tracking-[0.08em]',
+          isLoaded
+            ? 'animate-[fade_250ms_var(--ease-out-quint)_250ms_backwards]'
+            : 'pointer-events-none opacity-0',
+        )}
+      >
         <button
           autoFocus
           onClick={handleCopy}
-          className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-[opacity,scale] duration-150 hover:opacity-80 active:scale-[0.97]'
+          className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-4.5 py-2.75 uppercase transition-[opacity,scale] duration-150 hover:opacity-80 active:scale-[0.97]'
         >
           [{' '}
           {/* both labels share one grid cell so the button keeps the wider width */}
@@ -133,13 +163,13 @@ export function UploadedImage({
         </button>
         <button
           onClick={handleDownload}
-          className='border-ink hover:bg-ink hover:text-bg cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]'
+          className='border-ink hover:bg-ink hover:text-bg cursor-pointer border-[1.5px] px-4.5 py-2.75 uppercase transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]'
         >
           [ Download ]
         </button>
         <button
           onClick={onReset}
-          className='text-muted border-line hover:text-ink hover:border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]'
+          className='text-muted border-line hover:text-ink hover:border-ink cursor-pointer border-[1.5px] px-4.5 py-2.75 uppercase transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]'
         >
           [ + New ]
         </button>
@@ -153,7 +183,7 @@ export function UploadedImage({
       </p>
 
       {error && (
-        <div className='animate-fadein flex items-center gap-2.5 font-mono text-sm tracking-[0.05em]'>
+        <div className='animate-fadein flex items-center gap-2.5 font-mono text-sm tracking-wider'>
           <span className='border-ink inline-flex size-4 items-center justify-center border-[1.5px] font-bold'>
             !
           </span>
