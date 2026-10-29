@@ -5,7 +5,7 @@ import { Container } from './Container'
 
 interface UploadedImageProps {
   imageUrl: string
-  imageId: string
+  shortUrl: string
   file: File
   onReset: () => void
 }
@@ -18,7 +18,7 @@ function formatSize(bytes: number) {
 
 export function UploadedImage({
   imageUrl,
-  imageId,
+  shortUrl,
   file,
   onReset,
 }: UploadedImageProps) {
@@ -38,7 +38,7 @@ export function UploadedImage({
   const handleCopy = async () => {
     setError(null)
     try {
-      await navigator.clipboard.writeText(imageId)
+      await navigator.clipboard.writeText(shortUrl)
       setIsCopied(true)
       clearTimeout(copiedTimer.current)
       copiedTimer.current = setTimeout(() => setIsCopied(false), 1800)
@@ -52,7 +52,7 @@ export function UploadedImage({
     ['Format', file.type.split('/')[1].toUpperCase()],
     ['Size', formatSize(file.size)],
     ['Dimensions', dimensions],
-    ['Link', imageId.replace(/^https?:\/\//, '')],
+    ['Link', shortUrl.replace(/^https?:\/\//, '')],
   ]
 
   return (

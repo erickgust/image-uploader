@@ -31,14 +31,14 @@ function UploadIcon() {
 
 export function FileUploader() {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const [imageId, setImageId] = useState<string | null>(null)
+  const [shortUrl, setShortUrl] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [errorCount, setErrorCount] = useState(0)
 
-  const isDone = Boolean(imageUrl && imageId && file)
+  const isDone = Boolean(imageUrl && shortUrl && file)
   const isIdle = !isUploading && !isDone
 
   const { isDragging, dragHandlers } = useDragAndDrop({
@@ -107,7 +107,7 @@ export function FileUploader() {
       )
 
       setImageUrl(URL.createObjectURL(file))
-      setImageId(data.shortUrl)
+      setShortUrl(data.shortUrl)
     } catch (error) {
       console.error('Error uploading file', error)
       showError(
@@ -122,7 +122,7 @@ export function FileUploader() {
   const reset = () => {
     if (imageUrl) URL.revokeObjectURL(imageUrl)
     setImageUrl(null)
-    setImageId(null)
+    setShortUrl(null)
     setError(null)
     setErrorCount(0)
   }
@@ -237,7 +237,7 @@ export function FileUploader() {
       {isDone && (
         <UploadedImage
           imageUrl={imageUrl!}
-          imageId={imageId!}
+          shortUrl={shortUrl!}
           file={file!}
           onReset={reset}
         />
