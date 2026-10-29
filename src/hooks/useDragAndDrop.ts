@@ -36,6 +36,7 @@ export function useDragAndDrop({ onDrop }: UseDragAndDropProps) {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
+    dragCounter.current = 0
     setIsDragging(false)
 
     const files = e.dataTransfer?.files
