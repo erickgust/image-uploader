@@ -7,7 +7,7 @@ export function ThemeToggle() {
 
   return (
     <button
-      className='border-line hover:border-ink flex size-8 cursor-pointer items-center justify-center border transition-colors duration-150'
+      className='border-line hover:border-ink flex size-8 cursor-pointer items-center justify-center border transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]'
       onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
     >
       <span className='sr-only dark:hidden'>Switch to dark theme</span>

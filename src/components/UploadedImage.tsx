@@ -101,19 +101,19 @@ export function UploadedImage({
         <button
           autoFocus
           onClick={handleCopy}
-          className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-opacity hover:opacity-80'
+          className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-[opacity,scale] duration-150 hover:opacity-80 active:scale-[0.97]'
         >
           [ {isCopied ? 'Link copied' : 'Copy link'} ]
         </button>
         <button
           onClick={handleDownload}
-          className='border-ink hover:bg-ink hover:text-bg cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-colors'
+          className='border-ink hover:bg-ink hover:text-bg cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]'
         >
           [ Download ]
         </button>
         <button
           onClick={onReset}
-          className='text-muted border-line hover:text-ink hover:border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-colors'
+          className='text-muted border-line hover:text-ink hover:border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-[color,background-color,border-color,scale] duration-150 active:scale-[0.97]'
         >
           [ + New ]
         </button>
