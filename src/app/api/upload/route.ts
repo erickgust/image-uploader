@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { MAX_FILE_SIZE } from '@/lib/upload'
 import { nanoid } from 'nanoid'
 import { NextRequest } from 'next/server'
 
@@ -14,8 +15,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const MAX_SIZE = 2 * 1024 * 1024 // 2MB
-    if (file.size > MAX_SIZE) {
+    if (file.size > MAX_FILE_SIZE) {
       return Response.json(
         { error: 'Choose an image under 2 MB' },
         { status: 400 },

@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { useDragAndDrop } from '@/hooks/useDragAndDrop'
 import { usePasteFile } from '@/hooks/usePasteFile'
+import { ALLOWED_TYPES, MAX_FILE_SIZE } from '@/lib/upload'
 import { Container } from './Container'
 import { LoadingState } from './LoadingState'
 import { UploadedImage } from './UploadedImage'
@@ -65,14 +66,12 @@ export function FileUploader() {
   }
 
   const handleFileUpload = async (file: File) => {
-    const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB in bytes
     if (file.size > MAX_FILE_SIZE) {
       showError('Choose an image under 2 MB')
       return
     }
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
-    if (!allowedTypes.includes(file.type)) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
       showError('Choose a JPG, PNG or GIF image')
       return
     }
@@ -171,7 +170,7 @@ export function FileUploader() {
             <input
               id='upload'
               type='file'
-              accept='image/png, image/jpeg, image/gif'
+              accept={ALLOWED_TYPES.join(', ')}
               aria-label='Drop your image here or browse. JPG, PNG or GIF, up to 2 MB'
               autoFocus={file !== null}
               className='peer sr-only'
