@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useEffectEvent } from 'react'
 
 interface UsePasteFileProps {
   onPaste: (file: File) => void
@@ -6,6 +6,8 @@ interface UsePasteFileProps {
 }
 
 export function usePasteFile({ onPaste, isDisabled }: UsePasteFileProps) {
+  const onPasteEvent = useEffectEvent(onPaste)
+
   useEffect(() => {
     if (isDisabled) return
 
@@ -14,7 +16,7 @@ export function usePasteFile({ onPaste, isDisabled }: UsePasteFileProps) {
 
       if (files && files.length > 0) {
         const file = files[0]
-        onPaste(file)
+        onPasteEvent(file)
       }
     }
 
@@ -23,5 +25,5 @@ export function usePasteFile({ onPaste, isDisabled }: UsePasteFileProps) {
     return () => {
       document.removeEventListener('paste', handlePaste)
     }
-  }, [onPaste, isDisabled])
+  }, [isDisabled])
 }
