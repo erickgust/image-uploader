@@ -2,23 +2,31 @@ import { supabase } from '@/lib/supabase'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { cache } from 'react'
 
-export const metadata: Metadata = {
-  robots: { index: false },
+type Props = { params: Promise<{ id: string }> }
+
+const getImage = cache((id: string) =>
+  supabase.from('images').select('url').eq('public_id', id).single(),
+)
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params
+  const { data } = await getImage(id)
+
+  return {
+    robots: { index: false },
+    ...(data && {
+      openGraph: { images: [data.url] },
+      twitter: { card: 'summary_large_image', images: [data.url] },
+    }),
+  }
 }
 
-export default async function FullImagePage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function FullImagePage({ params }: Props) {
   const { id } = await params
 
-  const { data, error } = await supabase
-    .from('images')
-    .select('*')
-    .eq('public_id', id)
-    .single()
+  const { data, error } = await getImage(id)
 
   if (error) {
     return (
