@@ -1,5 +1,5 @@
 import NextImage from 'next/image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Container } from './Container'
 
 interface UploadedImageProps {
@@ -24,6 +24,7 @@ export function UploadedImage({
   const [isCopied, setIsCopied] = useState(false)
   const [dimensions, setDimensions] = useState('—')
   const [error, setError] = useState<string | null>(null)
+  const copiedTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const handleDownload = async () => {
     setError(null)
@@ -50,7 +51,8 @@ export function UploadedImage({
     try {
       await navigator.clipboard.writeText(imageId)
       setIsCopied(true)
-      setTimeout(() => setIsCopied(false), 1800)
+      clearTimeout(copiedTimer.current)
+      copiedTimer.current = setTimeout(() => setIsCopied(false), 1800)
     } catch (error) {
       console.error('Error copying link', error)
       setError('Unable to copy. Select the link and copy it.')
@@ -103,7 +105,31 @@ export function UploadedImage({
           onClick={handleCopy}
           className='bg-ink text-bg border-ink cursor-pointer border-[1.5px] px-[18px] py-[11px] uppercase transition-[opacity,scale] duration-150 hover:opacity-80 active:scale-[0.97]'
         >
-          [ {isCopied ? 'Link copied' : 'Copy link'} ]
+          [{' '}
+          {/* both labels share one grid cell so the button keeps the wider width */}
+          <span className='*:ease-out-quint inline-grid *:transition-[opacity,translate] *:[grid-area:1/1] motion-reduce:*:translate-y-0'>
+            <span
+              aria-hidden={isCopied}
+              className={
+                isCopied
+                  ? '-translate-y-1.5 opacity-0 duration-150'
+                  : 'duration-200'
+              }
+            >
+              Copy link
+            </span>
+            <span
+              aria-hidden={!isCopied}
+              className={
+                isCopied
+                  ? 'duration-200'
+                  : 'translate-y-1.5 opacity-0 duration-150'
+              }
+            >
+              Link copied
+            </span>
+          </span>{' '}
+          ]
         </button>
         <button
           onClick={handleDownload}
