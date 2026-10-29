@@ -28,24 +28,11 @@ export function UploadedImage({
   const [isLoaded, setIsLoaded] = useState(false)
   const copiedTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  const handleDownload = async () => {
-    setError(null)
-    try {
-      const response = await fetch(imageUrl)
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      const blob = await response.blob()
-      const blobUrl = window.URL.createObjectURL(blob)
-
-      const link = document.createElement('a')
-      link.href = blobUrl
-      link.download = file.name
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    } catch (error) {
-      console.error('Error downloading file', error)
-      setError('Unable to download. Try again.')
-    }
+  const handleDownload = () => {
+    const link = document.createElement('a')
+    link.href = imageUrl
+    link.download = file.name
+    link.click()
   }
 
   const handleCopy = async () => {
