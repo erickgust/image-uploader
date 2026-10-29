@@ -22,34 +22,29 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
-    if (!allowedTypes.includes(file.type)) {
-      return Response.json(
-        { error: 'Choose a JPG, PNG or GIF image' },
-        { status: 400 },
-      )
-    }
-
-    // file.type is client-provided, so check the real format from the magic bytes
+    // file.type is client-provided, so take the real format from the magic bytes
     const header = new Uint8Array(await file.slice(0, 4).arrayBuffer())
     const signatures = [
-      [0x89, 0x50, 0x4e, 0x47], // PNG
-      [0xff, 0xd8, 0xff], // JPEG
-      [0x47, 0x49, 0x46, 0x38], // GIF
+      { type: 'image/png', ext: 'png', bytes: [0x89, 0x50, 0x4e, 0x47] },
+      { type: 'image/jpeg', ext: 'jpeg', bytes: [0xff, 0xd8, 0xff] },
+      { type: 'image/gif', ext: 'gif', bytes: [0x47, 0x49, 0x46, 0x38] },
     ]
-    if (!signatures.some((sig) => sig.every((byte, i) => header[i] === byte))) {
+    const format = signatures.find((sig) =>
+      sig.bytes.every((byte, i) => header[i] === byte),
+    )
+    if (!format) {
       return Response.json(
         { error: 'Choose a JPG, PNG or GIF image' },
         { status: 400 },
       )
     }
 
-    const [, fileExt] = file.type.split('/')
-    const fileName = `${nanoid()}.${fileExt}`
+    const fileName = `${nanoid()}.${format.ext}`
 
     const { data, error } = await supabase.storage
       .from('images')
       .upload(`public/${fileName}`, file, {
+        contentType: format.type,
         upsert: false,
       })
 
