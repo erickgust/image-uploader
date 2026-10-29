@@ -70,6 +70,7 @@ export function UploadedImage({
         <NextImage
           src={imageUrl}
           alt='Uploaded image'
+          loading='eager'
           width={0}
           height={0}
           sizes='620px'

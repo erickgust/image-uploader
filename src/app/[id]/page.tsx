@@ -34,6 +34,7 @@ export default async function FullImagePage({
           className='object-contain'
           src={data.url}
           alt='Shared image'
+          loading='eager'
         />
       </div>
     </main>
