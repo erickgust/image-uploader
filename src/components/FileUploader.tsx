@@ -35,6 +35,7 @@ export function FileUploader() {
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [errorCount, setErrorCount] = useState(0)
 
   const isDone = Boolean(imageUrl && imageId && file)
   const isIdle = !isUploading && !isDone
@@ -58,16 +59,21 @@ export function FileUploader() {
     e.target.value = ''
   }
 
+  const showError = (message: string) => {
+    setError(message)
+    setErrorCount((count) => count + 1)
+  }
+
   const handleFileUpload = async (file: File) => {
     const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB in bytes
     if (file.size > MAX_FILE_SIZE) {
-      setError('Choose an image under 2 MB')
+      showError('Choose an image under 2 MB')
       return
     }
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
     if (!allowedTypes.includes(file.type)) {
-      setError('Choose a JPG, PNG or GIF image')
+      showError('Choose a JPG, PNG or GIF image')
       return
     }
 
@@ -75,6 +81,7 @@ export function FileUploader() {
     setProgress(0)
     setIsUploading(true)
     setError(null)
+    setErrorCount(0)
 
     const formData = new FormData()
     formData.append('file', file)
@@ -104,7 +111,7 @@ export function FileUploader() {
       setImageId(data.shortUrl)
     } catch (error) {
       console.error('Error uploading file', error)
-      setError(
+      showError(
         (error as Error).message ||
           'Unable to upload. Check your connection and try again.',
       )
@@ -118,6 +125,7 @@ export function FileUploader() {
     setImageUrl(null)
     setImageId(null)
     setError(null)
+    setErrorCount(0)
   }
 
   return (
@@ -125,7 +133,7 @@ export function FileUploader() {
       className='bg-bg relative flex flex-1'
       {...(isIdle ? dragHandlers : {})}
     >
-      <div className='pointer-events-none absolute inset-0 bg-[linear-gradient(var(--grid)_1px,transparent_1px),linear-gradient(90deg,var(--grid)_1px,transparent_1px)] bg-[size:42px_42px]' />
+      <div className='pointer-events-none absolute inset-0 bg-[linear-gradient(var(--grid)_1px,transparent_1px),linear-gradient(90deg,var(--grid)_1px,transparent_1px)] bg-size-[42px_42px]' />
 
       {hudCorners.map((corner) => (
         <div
@@ -134,13 +142,13 @@ export function FileUploader() {
         />
       ))}
 
-      <div className='text-muted font-mono text-xs tracking-[0.1em] uppercase max-sm:hidden'>
-        <div className='absolute top-6 left-[50px]'>hoist://v2</div>
-        <div className='absolute top-6 right-[50px]'>Limit 2.0MB</div>
-        <div className='absolute bottom-6 left-[50px]'>Fmt JPG·PNG·GIF</div>
-        <div className='absolute right-[50px] bottom-6 flex items-center gap-[7px]'>
+      <div className='text-muted font-mono text-xs tracking-widest uppercase max-sm:hidden'>
+        <div className='absolute top-6 left-12.5'>hoist://v2</div>
+        <div className='absolute top-6 right-12.5'>Limit 2.0MB</div>
+        <div className='absolute bottom-6 left-12.5'>Fmt JPG·PNG·GIF</div>
+        <div className='absolute right-12.5 bottom-6 flex items-center gap-1.75'>
           {isUploading ? 'Busy' : isDone ? 'Done' : 'Ready'}
-          <span className='bg-ink animate-blink size-[7px]' />
+          <span className='bg-ink animate-blink size-1.75' />
         </div>
       </div>
 
@@ -153,8 +161,13 @@ export function FileUploader() {
       </p>
 
       {isIdle && (
-        <div className='relative flex flex-1 flex-col items-center justify-center p-12'>
-          <Container className='w-full max-w-[540px]'>
+        <div
+          className={clsx(
+            'relative flex flex-1 flex-col items-center justify-center p-12',
+            file !== null && 'animate-fadein',
+          )}
+        >
+          <Container className='w-full max-w-135'>
             <input
               id='upload'
               type='file'
@@ -166,16 +179,16 @@ export function FileUploader() {
             />
             <label
               htmlFor='upload'
-              className='group hover:bg-bg2 peer-focus-visible:outline-ink flex min-h-[46vh] cursor-pointer flex-col items-center justify-center gap-[22px] p-9 text-center transition-colors peer-focus-visible:outline-2 peer-focus-visible:-outline-offset-4'
+              className='group hover:bg-bg2 peer-focus-visible:outline-ink flex min-h-[46vh] cursor-pointer flex-col items-center justify-center gap-5.5 p-9 text-center transition-colors peer-focus-visible:outline-2 peer-focus-visible:-outline-offset-4'
             >
-              <div className='border-ink group-hover:bg-ink group-hover:text-bg flex size-[60px] items-center justify-center border-[1.5px] transition duration-150 motion-safe:group-hover:-translate-y-[3px]'>
+              <div className='border-ink group-hover:bg-ink group-hover:text-bg flex size-15 items-center justify-center border-[1.5px] transition duration-150 group-active:scale-[0.97] motion-safe:group-hover:-translate-y-0.75 motion-safe:group-active:translate-y-0'>
                 <UploadIcon />
               </div>
               <div className='flex flex-col gap-2.5'>
                 <h1 className='font-display text-[27px] leading-[1.1] font-semibold tracking-[-0.02em]'>
                   Drop your image here
                 </h1>
-                <p className='text-muted font-mono text-xs tracking-[0.1em] uppercase'>
+                <p className='text-muted font-mono text-xs tracking-widest uppercase'>
                   Drag &nbsp;·&nbsp; Paste &nbsp;·&nbsp;{' '}
                   <span className='text-ink border-ink border-b-[1.5px] pb-px'>
                     Browse
@@ -188,8 +201,8 @@ export function FileUploader() {
             </label>
 
             {isDragging && (
-              <div className='bg-bg2 border-ink animate-popin absolute inset-0 flex flex-col items-center justify-center gap-[18px] border-[1.5px]'>
-                <div className='bg-ink text-bg flex size-[60px] items-center justify-center'>
+              <div className='bg-bg2 border-ink animate-popin absolute inset-0 flex flex-col items-center justify-center gap-4.5 border-[1.5px]'>
+                <div className='bg-ink text-bg flex size-15 items-center justify-center'>
                   <UploadIcon />
                 </div>
                 <h2 className='font-display text-[23px] font-semibold tracking-[-0.02em]'>
@@ -201,7 +214,13 @@ export function FileUploader() {
 
           <div className='mt-4 min-h-4'>
             {error && (
-              <div className='animate-fadein flex items-center justify-center gap-2.5 font-mono text-sm tracking-[0.05em]'>
+              <div
+                key={errorCount}
+                className={clsx(
+                  errorCount > 1 ? 'animate-shake' : 'animate-fadein',
+                  'flex items-center justify-center gap-2.5 font-mono text-sm tracking-wider',
+                )}
+              >
                 <span className='border-ink inline-flex size-4 shrink-0 items-center justify-center border-[1.5px] font-bold'>
                   !
                 </span>
