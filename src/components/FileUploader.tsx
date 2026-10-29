@@ -130,7 +130,7 @@ export function FileUploader() {
 
   return (
     <section
-      className='bg-bg relative flex flex-1'
+      className='bg-bg relative flex flex-1 overflow-clip'
       {...(isIdle ? dragHandlers : {})}
     >
       <div className='pointer-events-none absolute inset-0 bg-[linear-gradient(var(--grid)_1px,transparent_1px),linear-gradient(90deg,var(--grid)_1px,transparent_1px)] bg-size-[42px_42px]' />
