@@ -100,7 +100,7 @@ export function FileUploader() {
         },
       )
 
-      setImageUrl(data.url)
+      setImageUrl(URL.createObjectURL(file))
       setImageId(data.shortUrl)
     } catch (error) {
       console.error('Error uploading file', error)
@@ -114,6 +114,7 @@ export function FileUploader() {
   }
 
   const reset = () => {
+    if (imageUrl) URL.revokeObjectURL(imageUrl)
     setImageUrl(null)
     setImageId(null)
     setError(null)
