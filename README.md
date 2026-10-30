@@ -1,11 +1,16 @@
-# Hoist
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/hoist-lockup-dark.svg">
+    <img src="public/hoist-lockup-light.svg" alt="Hoist" height="48">
+  </picture>
+</h1>
 
 Upload an image and get a short link to share it. Built with Next.js and Supabase.
 
 ## Features
 
 - Upload by drag and drop, file picker, or pasting from the clipboard
-- JPG, PNG and GIF up to 2 MB
+- JPG, PNG and GIF up to 4 MB
 - The server checks the file's real format, not just its extension
 - Short share links (`/<id>`) that open the full image
 - Light and dark theme
